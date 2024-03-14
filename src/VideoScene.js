@@ -7,7 +7,6 @@ import React, { Suspense, useState, useRef, useEffect } from "react";
 
 //some control variables
 var openedWindow = false;
-
 const VideoScene = ()=>
 {
     //references
@@ -72,7 +71,11 @@ const VideoScene = ()=>
       });
 
     useEffect(() => {
+        console.log("Binding Key presses");
         window.addEventListener('keydown', (event) => {
+            if (openedWindow)
+                return;
+            console.log(videoChangeRate);
             if (event.key === 'ArrowUp' || event.key === 'w')
             {
                 video.currentTime += videoChangeRate;
@@ -85,6 +88,9 @@ const VideoScene = ()=>
             setShowCafeButton(video.currentTime === 22);
         })
         window.addEventListener('wheel', (event)=>{
+            if (openedWindow)
+                return;
+            console.log(videoChangeRate);
             if (event.deltaY > 0)
             {
                 video.currentTime += videoChangeRate;
@@ -96,7 +102,7 @@ const VideoScene = ()=>
             console.log("Current Time" + video.currentTime);
             setShowCafeButton(video.currentTime === 22);
         })
-    });
+    }, []);
 
     useFrame((state, delta)=>{ //The Update function, runs each frame
         
@@ -132,7 +138,7 @@ const VideoScene = ()=>
                     <div onClick={function(){
                         descriptionHolder.style.visibility = "visible";
                         descriptionHolder.style.pointerEvents = "all";
-                        openedWindow = false;
+                        openedWindow = true;
                         console.log("Clicked on button");
                     }}>
                         <h1 className='clickableButton'>Cafe Valvet</h1>
