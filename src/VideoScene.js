@@ -40,10 +40,8 @@ const VideoScene = ()=>
         openedWindow = false;
         //setup the popup window
         descriptionHolder.appendChild(holder);
-        closeButton.style.height = "5vh";
-        closeButton.style.width = "5vw";
+        closeButton.className = "UIClickableButton"
         closeButton.textContent = "X";
-        closeButton.style.right = "0";
         closeButton.addEventListener('click', function(){
             descriptionHolder.style.visibility = "hidden";
             descriptionHolder.style.pointerEvents = "none";
@@ -140,8 +138,8 @@ const VideoScene = ()=>
                         descriptionHolder.style.pointerEvents = "all";
                         openedWindow = true;
                         console.log("Clicked on button");
-                    }}>
-                        <h1 className='clickableButton'>Cafe Valvet</h1>
+                    }} style={{zIndex: 2}}>
+                        <h1 className='worldSpaceClickableButton'>Cafe Valvet</h1>
                     </div> 
                 </Html>
                 <meshBasicMaterial></meshBasicMaterial>
