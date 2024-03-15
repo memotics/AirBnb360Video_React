@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Html, OrbitControls } from "@react-three/drei"; //Camera Controls
+import { Html, OrbitControls, Preload } from "@react-three/drei"; //Camera Controls
 import { useFrame } from '@react-three/fiber';
 import React, { Suspense, useState, useRef, useEffect } from "react";
 
@@ -14,7 +14,6 @@ const VideoScene = ()=>
     const videoChangeRate = 0.5;
     // const videoPopUpNodeRange = 0.5;
     const [showCafeButton, setShowCafeButton]= useState(false);
-
     const descriptionHolder = document.getElementById("descriptionHolder");
     descriptionHolder.style.zIndex = "3";
     const holder = document.createElement("div");
@@ -22,9 +21,10 @@ const VideoScene = ()=>
     const img = document.createElement("img");
     const descriptiontext = document.createElement("p");
     const closeButton = document.createElement("button");
-
+    
     const [video] = useState(() => {
         const vid = document.createElement("video");
+        vid.preload = "true";
         vid.src = "./videos/street360.mp4";
         vid.crossOrigin = "Anonymous";
         vid.loop = true;
@@ -43,9 +43,16 @@ const VideoScene = ()=>
         closeButton.className = "UIClickableButton"
         closeButton.textContent = "X";
         closeButton.addEventListener('click', function(){
-            descriptionHolder.style.visibility = "hidden";
-            descriptionHolder.style.pointerEvents = "none";
+            
+            descriptionHolder.className = "slideOutFromRight";
             openedWindow = false;
+            setTimeout(function() {
+                if (descriptionHolder.class != "slideOutFromRight")
+                    return;
+                // Code to execute after the delay
+                descriptionHolder.style.visibility = "hidden";
+                descriptionHolder.style.pointerEvents = "none";
+              }, 2000); // Delay in milliseconds (2 seconds in this case)
         });
         holder.appendChild(closeButton);
 
@@ -137,6 +144,7 @@ const VideoScene = ()=>
                         descriptionHolder.style.visibility = "visible";
                         descriptionHolder.style.pointerEvents = "all";
                         openedWindow = true;
+                        descriptionHolder.className = "slideInFromRight";
                         console.log("Clicked on button");
                     }} style={{zIndex: 2}}>
                         <h1 className='worldSpaceClickableButton'>Cafe Valvet</h1>

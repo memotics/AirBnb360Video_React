@@ -67,10 +67,35 @@ body {
 #descriptionHolder{
   background-color: rgba(255, 255, 255, 255);
   position: fixed;
-  right: 0;
   bottom: 0;
   top: 0;
   z-index: 2;
   width: 30%;
   overflow: auto;
+}
+
+.slideInFromRight{
+  animation-name: descriptionSlideInFromRight;
+  animation-duration: 2s;
+  opacity: 1;
+  pointer-events: all;
+  right: 0;
+}
+
+.slideOutFromRight{
+  animation-name: descriptionSlideOutToRight;
+  animation-duration: 2s;
+  right: -30%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes descriptionSlideInFromRight {
+  from {right: -30%; opacity: 0;}
+  to {right: 0; opacity: 1;}
+}
+
+@keyframes descriptionSlideOutToRight {
+  from {right: 0; opacity: 1;}
+  to {right: -30%; opacity: 0;}
 }
