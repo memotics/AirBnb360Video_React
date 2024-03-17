@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+//currently this code is just for the controls button that shows at the start of the session
+
 const UserInterface = () => {
   const [isVisible, setIsVisible] = useState(true); // Track visibility state
 
