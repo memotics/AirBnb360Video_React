@@ -2,11 +2,17 @@ import * as THREE from 'three';
 import { Html, OrbitControls, Preload } from "@react-three/drei"; //Camera Controls
 import { useFrame } from '@react-three/fiber';
 import React, { Suspense, useState, useRef, useEffect } from "react";
+import ClickableButton from './ImageClickableButton';
+import PhysicsParticles from './PhysicsParticles';
+import ImageClickableButton from './ImageClickableButton';
+import VideoClickableButton from './VideoClickableButton';
+import VideoScreen from './VideoScreen';
 
 //Code in here is meant for only threejs/webgl scene.
 
 //some control variables
 var openedWindow = false;
+const instructions = document.getElementById('instructions');
 const VideoScene = ()=>
 {
     //references
@@ -14,13 +20,9 @@ const VideoScene = ()=>
     const videoChangeRate = 0.5;
     // const videoPopUpNodeRange = 0.5;
     const [showCafeButton, setShowCafeButton]= useState(false);
-    const descriptionHolder = document.getElementById("descriptionHolder");
-    descriptionHolder.style.zIndex = "3";
-    const holder = document.createElement("div");
-    const header = document.createElement("h3");
-    const img = document.createElement("img");
-    const descriptiontext = document.createElement("p");
-    const closeButton = document.createElement("button");
+    const [showPalaceButton, setShowPalaceButton]= useState(false);
+    const [showPhysics, setShowPhysics]= useState(true);
+    const [dropPhysicss, setDropPhysicss]= useState(false);
     
     const [video] = useState(() => {
         const vid = document.createElement("video");
@@ -33,87 +35,62 @@ const VideoScene = ()=>
         return vid;
       });
     
-    const [description] = useState(() => {
-
-        descriptionHolder.style.visibility = "hidden";
-        descriptionHolder.style.pointerEvents = "none";
-        openedWindow = false;
-        //setup the popup window
-        descriptionHolder.appendChild(holder);
-        closeButton.className = "UIClickableButton"
-        closeButton.textContent = "X";
-        closeButton.addEventListener('click', function(){
-            
-            descriptionHolder.className = "slideOutFromRight";
-            openedWindow = false;
-            setTimeout(function() {
-                if (descriptionHolder.class != "slideOutFromRight")
-                    return;
-                // Code to execute after the delay
-                descriptionHolder.style.visibility = "hidden";
-                descriptionHolder.style.pointerEvents = "none";
-              }, 2000); // Delay in milliseconds (2 seconds in this case)
-        });
-        holder.appendChild(closeButton);
-
-        header.style.margin = "5%";
-        header.textContent = "Cafe Valvet";
-        header.style.textAlign = "center";
-        holder.appendChild(header);
-        
-        img.src = "https://i.seadn.io/gae/tgI3ZKaErx1p33QEbW7Sqry5__D60WgpYjKmBIzmrWy1pEk0Urc9aIVBU9seBnLSCUM4hx-5aU4LpIOBC3_43XreHQhs0WqNKE-4fw?auto=format&dpr=1&w=1000";
-        img.style.width = "90%";
-        img.style.margin = "5%";
-        holder.appendChild(img);
-
-        descriptiontext.textContent = "A normal cafe selling NFTs, some say it tastes good";
-        descriptiontext.style.margin = "5%";
-        descriptiontext.style.textAlign = "center";
-        descriptiontext.style.textOverflow = "wrap";
-        descriptiontext.style.overflowWrap = "break-word";
-        holder.appendChild(descriptiontext);
-        return holder;
-      });
 
     useEffect(() => {
         console.log("Binding Key presses");
         window.addEventListener('keydown', (event) => {
             if (openedWindow)
                 return;
-            console.log(videoChangeRate);
             if (event.key === 'ArrowUp' || event.key === 'w')
             {
                 video.currentTime += videoChangeRate;
+                
+                //setShowPhysics(false);
+                setDropPhysicss(true);
+                instructions.style.visibility = 'hidden';
+                instructions.style.pointerEvents = 'none';
             }
             else if (event.key === 'ArrowDown' || event.key === 's')
             {
                 video.currentTime -= videoChangeRate;
+                //setShowPhysics(false);
+                setDropPhysicss(true);
+                instructions.style.visibility = 'hidden';
             }
             console.log("Current Time" + video.currentTime);
             setShowCafeButton(video.currentTime === 22);
+            setShowPalaceButton(video.currentTime === 33);
         })
         window.addEventListener('wheel', (event)=>{
             if (openedWindow)
-                return;
-            console.log(videoChangeRate);
-            if (event.deltaY > 0)
-            {
-                video.currentTime += videoChangeRate;
-            }
-            else if (event.deltaY < 0)
-            {
-                video.currentTime -= videoChangeRate;
-            }
-            console.log("Current Time" + video.currentTime);
-            setShowCafeButton(video.currentTime === 22);
-        })
-    }, []);
+            return;
+        if (event.deltaY > 0)
+        {
+            video.currentTime += videoChangeRate;
+            // setShowPhysics(false);
+            setDropPhysicss(true);
+            console.log("DROP" + dropPhysicss);
+            instructions.style.visibility = 'hidden';
+        }
+        else if (event.deltaY < 0)
+        {
+            video.currentTime -= videoChangeRate;
+            // setShowPhysics(false);
+            setDropPhysicss(true);
+            console.log("DROP" + dropPhysicss);
+            instructions.style.visibility = 'hidden';
+        }
+        console.log("Current Time" + video.currentTime);
+        setShowCafeButton(video.currentTime === 22);
+        setShowPalaceButton(video.currentTime === 33);
+    })
+}, []);
 
-    useFrame((state, delta)=>{ //The Update function, runs each frame
-        
-    });
+useFrame((state, delta)=>{ //The Update function, runs each frame
+    
+});
 
-    return (
+return (
         <>
             {/* Camera Controls */}
             <OrbitControls enableZoom={false} enablePan={false}></OrbitControls>
@@ -127,7 +104,7 @@ const VideoScene = ()=>
                     </mesh>
                 </>
             }>
-                <mesh scale={[-10,10,10]} ref={videoSphereRef}>
+                <mesh scale={[-90,90,90]} ref={videoSphereRef}>
                     <sphereGeometry></sphereGeometry>
                     <meshBasicMaterial 
                         color="lightblue" 
@@ -137,22 +114,12 @@ const VideoScene = ()=>
                 </mesh>
             </Suspense>
             {/* A Test button for the cafe */}
-            {showCafeButton && (<mesh position={[-10,0,-5] }>
-                {/* <sphereGeometry></sphereGeometry> */}
-                <Html>
-                    <div onClick={function(){
-                        descriptionHolder.style.visibility = "visible";
-                        descriptionHolder.style.pointerEvents = "all";
-                        openedWindow = true;
-                        descriptionHolder.className = "slideInFromRight";
-                        console.log("Clicked on button");
-                    }} style={{zIndex: 2}}>
-                        <h1 className='worldSpaceClickableButton'>Cafe Valvet</h1>
-                    </div> 
-                </Html>
-                <meshBasicMaterial></meshBasicMaterial>
-            </mesh> )}
-            
+            {showCafeButton && (<ImageClickableButton buttonName='Cafe Valvet' imgSrc='./images/descriptionImages/CafeValvet.png'></ImageClickableButton>)}
+            {showCafeButton && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[10,0,5]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
+            {showPalaceButton && (<VideoClickableButton src="./videos/SDW.mp4"></VideoClickableButton>)}
+            {showPhysics && (
+                <PhysicsParticles dropPhysics={showPhysics}></PhysicsParticles>
+            )}
         </>
     )
 }

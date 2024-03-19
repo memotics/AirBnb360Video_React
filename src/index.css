@@ -19,6 +19,11 @@ html, body, #root
   margin: 0;
   padding: 0;
   overflow: hidden;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-display: block;
+  font-size: max(0.75rem, 0.8101851852vw);
+  background-color: #ecedef;
 }
 
 body {
@@ -98,4 +103,34 @@ body {
 @keyframes descriptionSlideOutToRight {
   from {right: 0; opacity: 1;}
   to {right: -30%; opacity: 0;}
+}
+
+
+@font-face {
+  font-family: "Playfair Display";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../public/fonts/PlayfairDisplay-Italic.woff") format("woff");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../public/fonts/Poppins-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../public/fonts/Poppins-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../public/fonts/Poppins-SemiBold.woff") format("woff");
 }

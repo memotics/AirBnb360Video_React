@@ -15,20 +15,19 @@ const creatingCanvasHandler = (state) => {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <UserInterface></UserInterface>
-    <div className='canvasContainer'> 
-      <div id="descriptionHolder"></div>
-      <Canvas
-        camera={{
-          fov: 75,
-          near: 0.1,
-          far: 100,
-        }}
-        onCreated={creatingCanvasHandler}>
-        <VideoScene></VideoScene>
-      </Canvas>
-      
-    </div>
+      <div className='canvasContainer'> 
+        <Canvas
+          camera={{
+            fov: 75,
+            near: 0.1,
+            far: 100,
+            zoom: 0.7
+          }}
+          onCreated={creatingCanvasHandler}>
+          <VideoScene></VideoScene>
+        </Canvas>
+        
+      </div>
   </>
 );
 
