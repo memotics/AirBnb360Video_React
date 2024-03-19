@@ -118,7 +118,7 @@ return (
             {showCafeButton && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[10,0,5]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
             {showPalaceButton && (<VideoClickableButton src="./videos/SDW.mp4"></VideoClickableButton>)}
             {showPhysics && (
-                <PhysicsParticles dropPhysics={showPhysics}></PhysicsParticles>
+                <PhysicsParticles dropPhysics={dropPhysicss}></PhysicsParticles>
             )}
         </>
     )
