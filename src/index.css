@@ -68,7 +68,6 @@ body {
   background-color: grey;
 }
 
-
 #descriptionHolder{
   background-color: rgba(255, 255, 255, 255);
   position: fixed;
@@ -94,6 +93,52 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
+.PopUpText{
+  position: fixed; 
+  left: 35%; 
+  top: 65%; 
+  text-align: center; 
+  font-size: 2.5vh; 
+  word-wrap: break-word; 
+  background-color: white; 
+  padding: 1.5%; 
+  border-radius: 60px; 
+  visibility: hidden; 
+  pointer-events: none; 
+  width: 30%;
+}
+
+#VideoClose {
+  position: absolute; /* Ensures close button stays within the panel */
+  top: 5px; /* Adjust for desired gap from top */
+  right: 2px; /* Adjust for desired gap from right */
+  background: none; /* Remove default button background */
+  border: none; /* Remove default button border */
+  font-size: 1.5rem; /* Adjust font size for close button */
+  cursor: pointer; /* Indicate clickable behavior */
+}
+
+.VideoHolder {
+  position: fixed;
+  left: 3vw;
+  top: 5vh;
+  right: 3vw;
+  bottom: 5vh;
+  background-color: white;
+  border-radius: 2vh;
+  display: flex;
+  flex-direction: column;
+  /* Added overflow: hidden to prevent potential iframe overflow */
+  overflow: hidden;
+}
+
+#ytVideo {
+  width: 80%; /* Ensures iframe fills the remaining space */
+  height: 100%; /* Ensures iframe fills the remaining space */ /* Adjust for desired gap (margin alternative below) */
+  padding: 20px 10%;
+}
+
 
 @keyframes descriptionSlideInFromRight {
   from {right: -30%; opacity: 0;}

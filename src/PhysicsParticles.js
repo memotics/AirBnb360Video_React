@@ -1,11 +1,12 @@
 import * as THREE from 'three'
-import { useRef, useReducer, useMemo } from 'react'
+import { useRef, useReducer, useMemo, useContext } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer, Html} from '@react-three/drei'
 import { CuboidCollider, BallCollider, Physics, RigidBody } from '@react-three/rapier'
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
 import { randInt } from 'three/src/math/MathUtils'
+import { StoredData } from './Context'
 
 const accents = ['#4060ff', '#20ffa0', '#ff4060', '#ffcc00']
 const shuffle = (accent = 0) => [
@@ -20,29 +21,28 @@ const shuffle = (accent = 0) => [
   { color: accents[accent], roughness: 0.1, accent: true }
 ]
 
-const PhysicsParticles = ({drop = true}) =>
+const PhysicsParticles = () =>
 {
-  console.log(drop);
     return (<>
-        <Scene droppingPhysics={drop}></Scene>
+        <Scene></Scene>
     </>);
 };
 
 export default PhysicsParticles;
 
-function Scene({droppingPhysics = false}) {
+function Scene() {
   const [accent, click] = useReducer((state) => ++state % accents.length, 0)
   const connectors = useMemo(() => shuffle(accent), [accent])
-  console.log("dp" + droppingPhysics);
+
   return (
     <>
       <ambientLight intensity={0.4} />
       <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
-      <Physics /*debug*/ gravity={[0, -9.85, 0]}>
+      <Physics /*debug*/ gravity={[0, -50, 0]}>
         <Pointer />
         <group position={[20,0,0]}>
-          {connectors.map((props, i) => <Connector key={i} {...props} droppingPhys={droppingPhysics.droppingPhys} />) /* prettier-ignore */}
-          <Connector position={[10, 10, 5]} droppingPhys={droppingPhysics}>
+          {connectors.map((props, i) => <Connector key={i} {...props} />) /* prettier-ignore */}
+          <Connector position={[10, 10, 5]}>
             <Model>
               <MeshTransmissionMaterial clearcoat={1} thickness={0.1} anisotropicBlur={0.1} chromaticAberration={0.1} samples={8} resolution={512} />
             </Model>
@@ -64,14 +64,16 @@ function Scene({droppingPhysics = false}) {
   )
 }
 
-function Connector({ position, children, vec = new THREE.Vector3(), scale, r = THREE.MathUtils.randFloatSpread, accent, droppingPhys = false, ...props }) {
+function Connector({ position, children, vec = new THREE.Vector3(), scale, r = THREE.MathUtils.randFloatSpread, accent, ...props }) {
   const api = useRef()
   const pos = useMemo(() => position || [r(10), r(10), r(10)], [])
+  const { dropPhysics, setDropPhysics } = useContext(StoredData);
+  console.log(dropPhysics);
   useFrame((state, delta) => {
     delta = Math.min(0.1, delta)
-    if(!droppingPhys)
+    if(!dropPhysics)
     {
-      api.current?.applyImpulse((vec.copy(api.current.translation()).negate()).multiplyScalar(0.3))
+      api.current?.applyImpulse((vec.copy(new THREE.Vector3(0,-5,0).add(api.current.translation())).negate()).multiplyScalar(0.3))
     }
   })
   return (
