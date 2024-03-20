@@ -26,7 +26,7 @@ const VideoScene = ()=>
     const [video] = useState(() => {
         const vid = document.createElement("video");
         vid.preload = "true";
-        vid.src = "./videos/street360.mp4";
+        vid.src = "./videos/LivingRoom.mp4";
         vid.crossOrigin = "Anonymous";
         vid.loop = true;
         vid.muted = true;
@@ -50,6 +50,7 @@ const VideoScene = ()=>
                 setTimeout(() => {
                     // Code to be executed after x seconds
                     setShowPhysics(false);
+                    console.log('Pain');
                   }, 10 * 1000); // Convert x seconds to milliseconds
                 instructions.style.pointerEvents = 'none';
             }
