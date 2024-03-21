@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { Canvas } from "@react-three/fiber"
@@ -18,10 +18,11 @@ root.render(
       <div className='canvasContainer'> 
         <Canvas
           camera={{
+            position: [2,5,-2],
             fov: 60,
             near: 0.1,
             far: 100,
-            zoom: 0.7
+            zoom: 0.7,
           }}
           onCreated={creatingCanvasHandler}>
           <VideoScene></VideoScene>

@@ -120,7 +120,7 @@ useFrame((state, delta)=>{ //The Update function, runs each frame
 
 return (
         <>
-            <OrbitControls enableZoom={false} enablePan={false}></OrbitControls>
+            <OrbitControls enableZoom={false} enablePan={false} target={[0,2,0]}></OrbitControls>S
             <Suspense fallback={
                 <>
                     <mesh>
@@ -140,7 +140,7 @@ return (
             </Suspense>
             {/* A Test button for the cafe */}
             {showCafeButton && (<ImageClickableButton buttonName='Cafe Valvet' imgSrc='./images/descriptionImages/CafeValvet.png'></ImageClickableButton>)}
-            {showCafeButton2 && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[10,0,5]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
+            {showCafeButton2 && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[5,3,20]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
             {showPalaceButton && (<VideoClickableButton src="./videos/SDW.mp4"></VideoClickableButton>)}
             <StoredData.Provider value={{data, setData}}>
                 {showPhysics && (
