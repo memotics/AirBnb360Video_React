@@ -1,11 +1,10 @@
 import * as THREE from 'three'
 import { useRef, useReducer, useMemo, useContext } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer, Html} from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { useGLTF, MeshTransmissionMaterial, Environment, Lightformer} from '@react-three/drei'
 import { CuboidCollider, BallCollider, Physics, RigidBody } from '@react-three/rapier'
 import { EffectComposer, N8AO } from '@react-three/postprocessing'
 import { easing } from 'maath'
-import { randInt } from 'three/src/math/MathUtils'
 import { StoredData } from './Context'
 
 const accents = ['#4060ff', '#20ffa0', '#ff4060', '#ffcc00']
@@ -67,11 +66,10 @@ function Scene() {
 function Connector({ position, children, vec = new THREE.Vector3(), scale, r = THREE.MathUtils.randFloatSpread, accent, ...props }) {
   const api = useRef()
   const pos = useMemo(() => position || [r(10), r(10), r(10)], [])
-  const { dropPhysics, setDropPhysics } = useContext(StoredData);
-  console.log(dropPhysics);
+  const { data, SetData } = useContext(StoredData);
   useFrame((state, delta) => {
     delta = Math.min(0.1, delta)
-    if(!dropPhysics)
+    if(!data.dropPhysics)
     {
       api.current?.applyImpulse((vec.copy(new THREE.Vector3(0,-5,0).add(api.current.translation())).negate()).multiplyScalar(0.3))
     }
@@ -94,7 +92,7 @@ function Pointer({ vec = new THREE.Vector3() }) {
     ref.current?.setNextKinematicTranslation(vec.set((mouse.x * viewport.width) / 2, (mouse.y * viewport.height) / 2, 0));
     if (calculate)
     {
-      if (lastCalculation != 0 && lastCalculation != mouse.y * viewport.height)
+      if (lastCalculation !== 0 && lastCalculation !== mouse.y * viewport.height)
       {
         console.log("moved mouse");
         lastCalculation = mouse.y * viewport.height;

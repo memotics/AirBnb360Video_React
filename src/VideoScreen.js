@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { useState, Suspense, useMemo } from 'react'
 import { useVideoTexture, Center } from '@react-three/drei'
-import CurvedPlane from "./CurvedPlane";
+import CurvedPlane from "./Primitives/CurvedPlane";
 
 
 const VideoScreen = (src)=>

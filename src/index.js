@@ -18,7 +18,7 @@ root.render(
       <div className='canvasContainer'> 
         <Canvas
           camera={{
-            fov: 75,
+            fov: 60,
             near: 0.1,
             far: 100,
             zoom: 0.7

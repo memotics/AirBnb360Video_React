@@ -6,6 +6,7 @@ import PhysicsParticles from './PhysicsParticles';
 import ImageClickableButton from './ImageClickableButton';
 import VideoClickableButton from './VideoClickableButton';
 import { StoredData } from './Context';
+import ArrowPointer from './Primitives/ArrowPointer';
 
 //Code in here is meant for only threejs/webgl scene.
 
@@ -14,23 +15,23 @@ var openedWindow = false;
 const instructions = document.getElementById('instructions');
 const VideoScene = ()=>
 {
-    const [dropPhysics, setDropPhysics] = useState(false);
+    const [data, setData] = useState(false);
     //references
     const videoSphereRef = useRef();
     const videoChangeRate = 0.5;
-    // const videoPopUpNodeRange = 0.5;
+    const videoPopUpNodeRange = 2;
     const [showCafeButton, setShowCafeButton]= useState(false);
+    const [showCafeButton2, setShowCafeButton2]= useState(false);
     const [showPalaceButton, setShowPalaceButton]= useState(false);
     const [showPhysics, setShowPhysics]= useState(true);
     
     const [video] = useState(() => {
         const vid = document.createElement("video");
-        vid.preload = "true";
-        vid.src = "./videos/LivingRoom.mp4";
+        vid.src = "./videos/street360.mp4";
         vid.crossOrigin = "Anonymous";
         vid.loop = true;
         vid.muted = true;
-        vid.loop = false;
+        vid.preload = "auto";
         return vid;
       });
     
@@ -45,29 +46,34 @@ const VideoScene = ()=>
                 video.currentTime += videoChangeRate;
                 
                 //setShowPhysics(false);
-                setDropPhysics(true);
+                setData({...data, dropPhysics: true});
                 instructions.style.visibility = 'hidden';
-                setTimeout(() => {
-                    // Code to be executed after x seconds
-                    setShowPhysics(false);
-                    console.log('Pain');
-                  }, 10 * 1000); // Convert x seconds to milliseconds
+                if (setShowPhysics)
+                {
+                    setTimeout(() => {
+                        // Code to be executed after x seconds
+                        setShowPhysics(false);
+                      }, 5 * 1000); // Convert x seconds to milliseconds
+                }
                 instructions.style.pointerEvents = 'none';
             }
             else if (event.key === 'ArrowDown' || event.key === 's')
             {
                 video.currentTime -= videoChangeRate;
                 //setShowPhysics(false);
-                setDropPhysics(true);
+                if (setShowPhysics)
+                {
+                    setTimeout(() => {
+                        // Code to be executed after x seconds
+                        setShowPhysics(false);
+                      }, 5 * 1000); // Convert x seconds to milliseconds
+                }
+                setData({...data, dropPhysics: true});
                 instructions.style.visibility = 'hidden';
-                setTimeout(() => {
-                    // Code to be executed after x seconds
-                    setShowPhysics(false);
-                  }, 10 * 1000); // Convert x seconds to milliseconds
             }
-            console.log("Current Time" + video.currentTime);
-            setShowCafeButton(video.currentTime === 22);
-            setShowPalaceButton(video.currentTime === 33);
+            setShowCafeButton2(video.currentTime >= 17.5 - videoPopUpNodeRange && video.currentTime <= 17.5 + videoPopUpNodeRange);
+            setShowCafeButton(video.currentTime >= 22 - videoPopUpNodeRange && video.currentTime <= 22 + videoPopUpNodeRange);
+            setShowPalaceButton(video.currentTime >= 33 - videoPopUpNodeRange && video.currentTime <= 33 + videoPopUpNodeRange);
         })
         window.addEventListener('wheel', (event)=>{
             if (openedWindow)
@@ -76,29 +82,35 @@ const VideoScene = ()=>
         {
             video.currentTime += videoChangeRate;
             // setShowPhysics(false);
-            setDropPhysics(true);
-            console.log("DROP:" + dropPhysics);
+            setData({...data, dropPhysics: true});
             instructions.style.visibility = 'hidden';
-            setTimeout(() => {
-                // Code to be executed after x seconds
-                setShowPhysics(false);
-              }, 10 * 1000); // Convert x seconds to milliseconds
+            if (setShowPhysics)
+            {
+                setTimeout(() => {
+                    // Code to be executed after x seconds
+                    setShowPhysics(false);
+                  }, 5 * 1000); // Convert x seconds to milliseconds
+            }
+            setData({...data, dropPhysics: true});
         }
         else if (event.deltaY < 0)
         {
             video.currentTime -= videoChangeRate;
             // setShowPhysics(false);
-            setDropPhysics(true);
-            console.log("DROP:" + dropPhysics);
+            setData({...data, dropPhysics: true});
+            if (setShowPhysics)
+            {
+                setTimeout(() => {
+                    // Code to be executed after x seconds
+                    setShowPhysics(false);
+                  }, 5 * 1000); // Convert x seconds to milliseconds
+            }
             instructions.style.visibility = 'hidden';
-            setTimeout(() => {
-                // Code to be executed after x seconds
-                setShowPhysics(false);
-              }, 10 * 1000); // Convert x seconds to milliseconds
         }
         console.log("Current Time" + video.currentTime);
-        setShowCafeButton(video.currentTime === 22);
-        setShowPalaceButton(video.currentTime === 33);
+        setShowCafeButton2(video.currentTime >= 17.5 - videoPopUpNodeRange && video.currentTime <= 17.5 + videoPopUpNodeRange);
+            setShowCafeButton(video.currentTime >= 22 - videoPopUpNodeRange && video.currentTime <= 22 + videoPopUpNodeRange);
+            setShowPalaceButton(video.currentTime >= 33 - videoPopUpNodeRange && video.currentTime <= 33 + videoPopUpNodeRange);
     })
 }, []);
 
@@ -120,7 +132,7 @@ return (
                 <mesh scale={[-90,90,90]} ref={videoSphereRef}>
                     <sphereGeometry></sphereGeometry>
                     <meshBasicMaterial 
-                        color="lightblue" 
+                        color="white" 
                         side={THREE.DoubleSide} >
                             <videoTexture attach="map" args={[video]} />
                         </meshBasicMaterial>
@@ -128,13 +140,14 @@ return (
             </Suspense>
             {/* A Test button for the cafe */}
             {showCafeButton && (<ImageClickableButton buttonName='Cafe Valvet' imgSrc='./images/descriptionImages/CafeValvet.png'></ImageClickableButton>)}
-            {showCafeButton && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[10,0,5]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
+            {showCafeButton2 && (<ImageClickableButton buttonName='Cafe Muren' imgSrc='./images/descriptionImages/CafeMuren.png' buttonPosition={[10,0,5]} closeButtonPosition={[-8, 12, 12]} rotation={[0, Math.PI * 0.5,0]}></ImageClickableButton>)}
             {showPalaceButton && (<VideoClickableButton src="./videos/SDW.mp4"></VideoClickableButton>)}
-            <StoredData.Provider value={{dropPhysics, setDropPhysics}}>
+            <StoredData.Provider value={{data, setData}}>
                 {showPhysics && (
                     <PhysicsParticles></PhysicsParticles>
                 )}
             </StoredData.Provider>
+            {/* <ArrowPointer></ArrowPointer> */}
         </>
     )
 }
